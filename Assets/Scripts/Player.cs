@@ -4,9 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public Transform UI;
-    Vector3 oldpos;
-
+    
     public GameObject[] itemsInventory;
     public GameObject[] itemsDropped;
 
@@ -43,9 +41,6 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        oldpos = transform.position;
-        UI.position = oldpos;
-
         selectedItem = hotbar[selectedSlot];
         inventoryObj.SetActive(false);
 
@@ -73,12 +68,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-//test
-        if(oldpos != transform.position)
-        {
-            oldpos = transform.position;
-            UI.position = oldpos;
-        }
+        
         if(oldMousePos != Input.mousePosition && isDragging)
         {
             oldMousePos = new Vector3(cam.ScreenToWorldPoint(Input.mousePosition).x, cam.ScreenToWorldPoint(Input.mousePosition).y, 0);
