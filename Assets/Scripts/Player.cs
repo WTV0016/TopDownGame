@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    
+    public int[,] craftingSlots = new int[3, 3];
+    public GameObject craftingSlotObj;
+    public GameObject[,] craftingSlotArray = new GameObject[3,3];
+
     public GameObject[] itemsInventory;
     public GameObject[] itemsDropped;
 
@@ -139,6 +142,10 @@ public class Player : MonoBehaviour
                 }
                 
             }
+            else if(hit.collider != null && hit.collider.gameObject.TryGetComponent<CraftingSlot>(out CraftingSlot craftingSlot))
+            {
+
+            }
         }
         //selecteditem = hotbar[selectedslot];
     }
@@ -167,8 +174,7 @@ public class Player : MonoBehaviour
 
         for (int i = 0; i < 9; i++)
         {
-            
-                Destroy(itemObjArray[i,i]);
+            Destroy(itemObjArray[i,i]);
         }
 
         for (int slot = 0; slot < 9; slot++)
@@ -243,6 +249,28 @@ public class Player : MonoBehaviour
         if (nextFreeSlotColumn == -1)
         {
             isInventoryFull = true;
+        }
+    }
+    void UpdateCraftingSlots()
+    {
+        GameObject itemObj;
+
+        foreach(GameObject obj in craftingSlotArray)
+        {
+            Destroy(obj);
+        }
+
+        for(int x = 0; x < 3; x++)
+        {
+            for(int y = 0; y < 3; y++)
+            {
+                itemObj = Instantiate(itemsInventory[craftingSlots[x, y]], position: Vector3.zero, Quaternion.identity);
+                itemObj.transform.SetParent(craftingSlotObj.transform.GetChild(y).GetChild(x));
+                itemObj.transform.localPosition = new Vector3(0, 0, 0);
+                itemObj.GetComponent<InventoryItem>().inventoryIndexX = x;
+                itemObj.GetComponent<InventoryItem>().inventoryIndexY = y;
+                craftingSlotArray[x, y] = itemObj;
+            }
         }
     }
 
