@@ -73,6 +73,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+//test
         if(oldpos != transform.position)
         {
             oldpos = transform.position;
