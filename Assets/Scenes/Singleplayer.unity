@@ -979,8 +979,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3ef84bbd2b594e42b9f2f884f658950, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  xPos: 0
-  yPos: 0
+  xPos: 1
+  yPos: 2
 --- !u!61 &112333926
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2073,8 +2073,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3ef84bbd2b594e42b9f2f884f658950, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  xPos: 0
-  yPos: 0
+  xPos: 2
+  yPos: 2
 --- !u!61 &354014111
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2198,7 +2198,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   xPos: 0
-  yPos: 0
+  yPos: 2
 --- !u!61 &390015255
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4755,7 +4755,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3ef84bbd2b594e42b9f2f884f658950, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  xPos: 0
+  xPos: 2
   yPos: 0
 --- !u!61 &1096103974
 BoxCollider2D:
@@ -5078,7 +5078,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3ef84bbd2b594e42b9f2f884f658950, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  xPos: 0
+  xPos: 1
   yPos: 0
 --- !u!61 &1124684517
 BoxCollider2D:
@@ -5451,7 +5451,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c75819f08cb48a4db139000aa07735c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  craftingSlotObj: {fileID: 0}
+  craftingSlotObj: {fileID: 1202485714}
   itemsInventory:
   - {fileID: 8783117177116520818, guid: 98415fdada1ca5c4ea848687b3e4b0a3, type: 3}
   - {fileID: 6245297652690859270, guid: 836bbb6337db47748a41ddb78c2b6b07, type: 3}
@@ -5733,8 +5733,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3ef84bbd2b594e42b9f2f884f658950, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  xPos: 0
-  yPos: 0
+  xPos: 1
+  yPos: 1
 --- !u!61 &1334598550
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -6791,8 +6791,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3ef84bbd2b594e42b9f2f884f658950, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  xPos: 0
-  yPos: 0
+  xPos: 2
+  yPos: 1
 --- !u!61 &1615188567
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -7040,7 +7040,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   xPos: 0
-  yPos: 0
+  yPos: 1
 --- !u!61 &1635313246
 BoxCollider2D:
   m_ObjectHideFlags: 0

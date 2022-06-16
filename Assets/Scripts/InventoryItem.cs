@@ -8,4 +8,6 @@ public class InventoryItem : MonoBehaviour
     public int inventoryIndexY;
 
     public int itemIndex;
+
+    public bool isInCraftingSlot = false;
 }

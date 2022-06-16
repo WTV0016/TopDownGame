@@ -126,25 +126,46 @@ public class Player : MonoBehaviour
                 Debug.Log("Hit Item...");
                 isDragging = true;
                 draggedItem = item.gameObject;
-                inventory[item.inventoryIndexX, item.inventoryIndexY] = 0;
+                if(item.GetComponent<InventoryItem>().isInCraftingSlot)
+                {
+                    craftingSlots[item.inventoryIndexX, item.inventoryIndexY] = 0;
+                }
+                else
+                {
+                    inventory[item.inventoryIndexX, item.inventoryIndexY] = 0;
+
+                }
                 draggedItem.GetComponent<BoxCollider2D>().enabled = false;
             }
-            else if(hit.collider != null && hit.collider.gameObject.TryGetComponent<InventorySlot>(out InventorySlot slot))
+            else if(hit.collider != null && hit.collider.gameObject.TryGetComponent<InventorySlot>(out InventorySlot slot) && isDragging)
             {
                 Debug.Log("Hit Slot...");
                 if (inventory[slot.posX, slot.posY] == 0)
                 {
+                    draggedItem.GetComponent<InventoryItem>().isInCraftingSlot = false;
                     inventory[slot.posX, slot.posY] = draggedItem.GetComponent<InventoryItem>().itemIndex;
                     UpdateInventory();
                     UpdateSelectedSlot();
                     isDragging = false;
-                    draggedItem.GetComponent<BoxCollider2D>().enabled = false;
+                    draggedItem.GetComponent<BoxCollider2D>().enabled = true;
+                    draggedItem.GetComponent<InventoryItem>().inventoryIndexX = slot.posX;
+                    draggedItem.GetComponent<InventoryItem>().inventoryIndexY = slot.posY;
                 }
-                
             }
-            else if(hit.collider != null && hit.collider.gameObject.TryGetComponent<CraftingSlot>(out CraftingSlot craftingSlot))
+            else if(hit.collider != null && hit.collider.gameObject.TryGetComponent<CraftingSlot>(out CraftingSlot craftingSlot) && isDragging)
             {
-
+                Debug.Log("Crafting Slot...");
+                if (craftingSlots[craftingSlot.xPos, craftingSlot.yPos] == 0)
+                {
+                    draggedItem.GetComponent<InventoryItem>().isInCraftingSlot = true;
+                    Debug.Log(craftingSlot.xPos + ", " + craftingSlot.yPos);
+                    craftingSlots[craftingSlot.xPos, craftingSlot.yPos] = draggedItem.GetComponent<InventoryItem>().itemIndex;
+                    UpdateInventory();
+                    isDragging = false;
+                    draggedItem.GetComponent<BoxCollider2D>().enabled = true;
+                    draggedItem.GetComponent<InventoryItem>().inventoryIndexX = craftingSlot.xPos;
+                    draggedItem.GetComponent<InventoryItem>().inventoryIndexY = craftingSlot.yPos;
+                }
             }
         }
         //selecteditem = hotbar[selectedslot];
@@ -245,7 +266,7 @@ public class Player : MonoBehaviour
                 }
             }
         }
-
+        UpdateCraftingSlots();
         if (nextFreeSlotColumn == -1)
         {
             isInventoryFull = true;
