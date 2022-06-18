@@ -4,9 +4,8 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public int[,] craftingSlots = new int[3, 3];
     public GameObject craftingSlotObj;
-    public GameObject[,] craftingSlotArray = new GameObject[3,3];
+    public GameObject craftingResultObj;
 
     public GameObject[] itemsInventory;
     public GameObject[] itemsDropped;
@@ -16,7 +15,7 @@ public class Player : MonoBehaviour
     public Transform itemContainer;
     
     GameObject itemObj;
-    GameObject[,] itemObjArray = new GameObject[9,4];
+    GameObject[,] itemObjArray = new GameObject[9,5];
 
     public int nextFreeSlotColumn = -1;
     public int nextFreeSlotRow = -1;
@@ -34,7 +33,7 @@ public class Player : MonoBehaviour
 
     public bool isInvOpen = false;
     public GameObject inventoryObj;
-    public int[,] inventory = new int[9, 4];
+    public int[,] inventory = new int[9, 5];
     bool isDragging;
     public Vector3 oldMousePos;
     GameObject draggedItem;
@@ -55,7 +54,7 @@ public class Player : MonoBehaviour
                 inventory[x, y] = 0;
                 if(y == 0)
                 {
-                    inventory[x, y] = 1;
+                    inventory[x, y] = 2;
                 }
             }
         }
@@ -126,15 +125,7 @@ public class Player : MonoBehaviour
                 Debug.Log("Hit Item...");
                 isDragging = true;
                 draggedItem = item.gameObject;
-                if(item.GetComponent<InventoryItem>().isInCraftingSlot)
-                {
-                    craftingSlots[item.inventoryIndexX, item.inventoryIndexY] = 0;
-                }
-                else
-                {
-                    inventory[item.inventoryIndexX, item.inventoryIndexY] = 0;
-
-                }
+                inventory[item.inventoryIndexX, item.inventoryIndexY] = 0;
                 draggedItem.GetComponent<BoxCollider2D>().enabled = false;
             }
             else if(hit.collider != null && hit.collider.gameObject.TryGetComponent<InventorySlot>(out InventorySlot slot) && isDragging)
@@ -142,6 +133,8 @@ public class Player : MonoBehaviour
                 Debug.Log("Hit Slot...");
                 if (inventory[slot.posX, slot.posY] == 0)
                 {
+                    Debug.Log("It's empty...");
+
                     draggedItem.GetComponent<InventoryItem>().isInCraftingSlot = false;
                     inventory[slot.posX, slot.posY] = draggedItem.GetComponent<InventoryItem>().itemIndex;
                     UpdateInventory();
@@ -150,23 +143,10 @@ public class Player : MonoBehaviour
                     draggedItem.GetComponent<BoxCollider2D>().enabled = true;
                     draggedItem.GetComponent<InventoryItem>().inventoryIndexX = slot.posX;
                     draggedItem.GetComponent<InventoryItem>().inventoryIndexY = slot.posY;
+                    Destroy(draggedItem);
                 }
             }
-            else if(hit.collider != null && hit.collider.gameObject.TryGetComponent<CraftingSlot>(out CraftingSlot craftingSlot) && isDragging)
-            {
-                Debug.Log("Crafting Slot...");
-                if (craftingSlots[craftingSlot.xPos, craftingSlot.yPos] == 0)
-                {
-                    draggedItem.GetComponent<InventoryItem>().isInCraftingSlot = true;
-                    Debug.Log(craftingSlot.xPos + ", " + craftingSlot.yPos);
-                    craftingSlots[craftingSlot.xPos, craftingSlot.yPos] = draggedItem.GetComponent<InventoryItem>().itemIndex;
-                    UpdateInventory();
-                    isDragging = false;
-                    draggedItem.GetComponent<BoxCollider2D>().enabled = true;
-                    draggedItem.GetComponent<InventoryItem>().inventoryIndexX = craftingSlot.xPos;
-                    draggedItem.GetComponent<InventoryItem>().inventoryIndexY = craftingSlot.yPos;
-                }
-            }
+            
         }
         //selecteditem = hotbar[selectedslot];
     }
@@ -225,15 +205,17 @@ public class Player : MonoBehaviour
         Debug.Log("Update Inventory...");
         nextFreeSlotColumn = -1;
 
+        
+
         for (int i = 0; i < 9; i++)
         {
-            for (int j = 0; j < 4; j++)
+            for (int j = 0; j < 5; j++)
             {
                 Destroy(itemObjArray[i, j]);
             }
         }
 
-        for (int slotRow = 0; slotRow < 4; slotRow++)
+        for (int slotRow = 0; slotRow < 5; slotRow++)
         {
             for (int slotColumn = 0; slotColumn < 9; slotColumn++)
             {
@@ -243,6 +225,12 @@ public class Player : MonoBehaviour
                 if (slotRow == 0)
                 {
                     itemObj.transform.SetParent(hotbarObj.transform.GetChild(slotColumn + 1).transform);
+                    itemObj.GetComponent<InventoryItem>().inventoryIndexX = slotColumn;
+                    itemObj.GetComponent<InventoryItem>().inventoryIndexY = slotRow;
+                }
+                else if(slotRow == 4)
+                {
+                    itemObj.transform.SetParent(craftingSlotObj.transform.GetChild(slotColumn).transform);
                     itemObj.GetComponent<InventoryItem>().inventoryIndexX = slotColumn;
                     itemObj.GetComponent<InventoryItem>().inventoryIndexY = slotRow;
                 }
@@ -266,34 +254,60 @@ public class Player : MonoBehaviour
                 }
             }
         }
-        UpdateCraftingSlots();
+        try
+        {
+            Destroy(craftingResultObj.transform.GetChild(0).gameObject);
+        }
+        catch { }
+        CheckCraftingSlots();
+
         if (nextFreeSlotColumn == -1)
         {
             isInventoryFull = true;
         }
     }
-    void UpdateCraftingSlots()
+
+    void CheckCraftingSlots()
     {
-        GameObject itemObj;
+        GameObject result;
 
-        foreach(GameObject obj in craftingSlotArray)
-        {
-            Destroy(obj);
-        }
+        Debug.Log("Check Crafting Slots...");
 
-        for(int x = 0; x < 3; x++)
+        int[,] craftingSlotArray = new int[3, 3];
+
+        for (int x = 0; x < 9; x++)
         {
-            for(int y = 0; y < 3; y++)
+            if(x < 3)
             {
-                itemObj = Instantiate(itemsInventory[craftingSlots[x, y]], position: Vector3.zero, Quaternion.identity);
-                itemObj.transform.SetParent(craftingSlotObj.transform.GetChild(y).GetChild(x));
-                itemObj.transform.localPosition = new Vector3(0, 0, 0);
-                itemObj.GetComponent<InventoryItem>().inventoryIndexX = x;
-                itemObj.GetComponent<InventoryItem>().inventoryIndexY = y;
-                craftingSlotArray[x, y] = itemObj;
+                craftingSlotArray[0, x] = inventory[x, 4];
+            }
+            else if(x < 6)
+            {
+                craftingSlotArray[1, x - 3] = inventory[x, 4];
+            }
+            else
+            {
+                craftingSlotArray[2, x - 6] = inventory[x, 4];
             }
         }
+
+        
+
+        if(craftingSlotArray[1,1] == 2)
+        {
+            Debug.Log("StickRecipe...");
+            result = Instantiate(itemsInventory[1], position: new Vector3(0,0,0), Quaternion.identity);
+            result.transform.SetParent(craftingResultObj.transform);
+            result.transform.localPosition = new Vector3(0, 0, 0);
+        }
+        else
+        {
+            result = Instantiate(itemsInventory[0], position: new Vector3(0, 0, 0), Quaternion.identity);
+            result.transform.SetParent(craftingResultObj.transform);
+
+        }
     }
+                    
 
     void UpdateSelectedSlot()
     {
