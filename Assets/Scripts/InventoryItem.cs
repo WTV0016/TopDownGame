@@ -9,5 +9,5 @@ public class InventoryItem : MonoBehaviour
 
     public int itemIndex;
 
-    public bool isInCraftingSlot = false;
+    public bool isInResultSlot = false;
 }

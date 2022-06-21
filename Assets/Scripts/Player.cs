@@ -6,6 +6,8 @@ public class Player : MonoBehaviour
 {
     public GameObject craftingSlotObj;
     public GameObject craftingResultObj;
+    public int craftingResult;
+    GameObject[] craftingslots = new GameObject[9];
 
     public GameObject[] itemsInventory;
     public GameObject[] itemsDropped;
@@ -127,6 +129,10 @@ public class Player : MonoBehaviour
                 draggedItem = item.gameObject;
                 inventory[item.inventoryIndexX, item.inventoryIndexY] = 0;
                 draggedItem.GetComponent<BoxCollider2D>().enabled = false;
+                if(draggedItem.GetComponent<InventoryItem>().isInResultSlot)
+                {
+                    draggedItem.GetComponent<InventoryItem>().isInResultSlot();
+                }
             }
             else if(hit.collider != null && hit.collider.gameObject.TryGetComponent<InventorySlot>(out InventorySlot slot) && isDragging)
             {
@@ -135,7 +141,7 @@ public class Player : MonoBehaviour
                 {
                     Debug.Log("It's empty...");
 
-                    draggedItem.GetComponent<InventoryItem>().isInCraftingSlot = false;
+                    draggedItem.GetComponent<InventoryItem>().isInResultSlot = false;
                     inventory[slot.posX, slot.posY] = draggedItem.GetComponent<InventoryItem>().itemIndex;
                     UpdateInventory();
                     UpdateSelectedSlot();
@@ -146,7 +152,10 @@ public class Player : MonoBehaviour
                     Destroy(draggedItem);
                 }
             }
-            
+            else if(hit.collider != null && hit.collider.gameObject.TryGetComponent<CraftingResult>(out CraftingResult result) && !isDragging)
+            {
+
+            }
         }
         //selecteditem = hotbar[selectedslot];
     }
@@ -233,6 +242,7 @@ public class Player : MonoBehaviour
                     itemObj.transform.SetParent(craftingSlotObj.transform.GetChild(slotColumn).transform);
                     itemObj.GetComponent<InventoryItem>().inventoryIndexX = slotColumn;
                     itemObj.GetComponent<InventoryItem>().inventoryIndexY = slotRow;
+                    craftingslots[slotColumn] = itemObj; 
                 }
                 else
                 {
@@ -295,13 +305,16 @@ public class Player : MonoBehaviour
 
         if(craftingSlotArray[1,1] == 2)
         {
+            craftingResult = 1;
             Debug.Log("StickRecipe...");
             result = Instantiate(itemsInventory[1], position: new Vector3(0,0,0), Quaternion.identity);
             result.transform.SetParent(craftingResultObj.transform);
             result.transform.localPosition = new Vector3(0, 0, 0);
+            result.GetComponent<InventoryItem>().isInResultSlot = true;
         }
         else
         {
+            craftingResult = 0;
             result = Instantiate(itemsInventory[0], position: new Vector3(0, 0, 0), Quaternion.identity);
             result.transform.SetParent(craftingResultObj.transform);
 

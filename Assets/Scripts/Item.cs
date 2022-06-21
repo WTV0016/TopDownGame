@@ -6,6 +6,8 @@ public class Item : MonoBehaviour
 {
     public int itemindex;
 
+
+
     // Start is called before the first frame update
     void Start()
     {

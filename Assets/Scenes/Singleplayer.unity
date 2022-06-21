@@ -5361,6 +5361,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   craftingSlotObj: {fileID: 1202485714}
   craftingResultObj: {fileID: 1949100049}
+  craftingResult: 0
   itemsInventory:
   - {fileID: 8783117177116520818, guid: 98415fdada1ca5c4ea848687b3e4b0a3, type: 3}
   - {fileID: 6245297652690859270, guid: 836bbb6337db47748a41ddb78c2b6b07, type: 3}
@@ -8211,6 +8212,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1949100050}
   - component: {fileID: 1949100051}
+  - component: {fileID: 1949100053}
+  - component: {fileID: 1949100052}
   m_Layer: 0
   m_Name: craftingResult
   m_TagString: Untagged
@@ -8283,6 +8286,44 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!61 &1949100052
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1949100049}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
+--- !u!114 &1949100053
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1949100049}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4618e7a7cc7cdb64d8686878d7bf75a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1952555032
 GameObject:
   m_ObjectHideFlags: 0
