@@ -42,6 +42,7 @@ public class Player : MonoBehaviour
 
     public Camera cam;
 
+
     // Start is called before the first frame update
     void Start()
     {
@@ -127,11 +128,23 @@ public class Player : MonoBehaviour
                 Debug.Log("Hit Item...");
                 isDragging = true;
                 draggedItem = item.gameObject;
-                inventory[item.inventoryIndexX, item.inventoryIndexY] = 0;
+                if (!item.isInResultSlot)
+                {
+                    inventory[item.inventoryIndexX, item.inventoryIndexY] = 0;
+                }
+                else
+                {
+                    craftingResult = 0;
+                }
                 draggedItem.GetComponent<BoxCollider2D>().enabled = false;
                 if(draggedItem.GetComponent<InventoryItem>().isInResultSlot)
                 {
-                    draggedItem.GetComponent<InventoryItem>().isInResultSlot();
+                    draggedItem.GetComponent<InventoryItem>().isInResultSlot = false;
+                    for(int i = 0; i < 9; i++)
+                    {
+                        Destroy(craftingslots[i]);
+                        inventory[i, 4] = 0;
+                    }
                 }
             }
             else if(hit.collider != null && hit.collider.gameObject.TryGetComponent<InventorySlot>(out InventorySlot slot) && isDragging)
@@ -311,6 +324,7 @@ public class Player : MonoBehaviour
             result.transform.SetParent(craftingResultObj.transform);
             result.transform.localPosition = new Vector3(0, 0, 0);
             result.GetComponent<InventoryItem>().isInResultSlot = true;
+            result.GetComponent<InventoryItem>().itemIndex = 1;
         }
         else
         {
