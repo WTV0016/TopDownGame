@@ -93,16 +93,20 @@ public class Player : MonoBehaviour
             UpdateInventory();
             UpdateSelectedSlot();
         }
-        if(Input.GetKeyDown(KeyCode.B) && isStoneNear)
+        if (Input.GetMouseButtonDown(0) && isStoneNear)
         {
-            if(stoneRange.lives > 1)
+            RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
+            if (hit.collider != null && hit.collider.gameObject.TryGetComponent<Stone>(out Stone stone))
             {
-                stoneRange.lives--;
-            }
-            else
-            {
-                stoneRange.DestroyStone(itemsDropped[3], itemContainer);
-                isStoneNear = false;
+                if (stoneRange.lives > 1)
+                {
+                    stoneRange.lives--;
+                }
+                else
+                {
+                    stoneRange.DestroyStone(itemsDropped[3], itemContainer);
+                    isStoneNear = false;
+                }
             }
         }
         if(Input.mouseScrollDelta.y != 0)
@@ -296,25 +300,12 @@ public class Player : MonoBehaviour
 
         Debug.Log("Check Crafting Slots...");
 
-        int[,] craftingSlotArray = new int[3, 3];
-
-        for (int x = 0; x < 9; x++)
+        int[,] craftingSlotArray = new int[3, 3]
         {
-            if(x < 3)
-            {
-                craftingSlotArray[0, x] = inventory[x, 4];
-            }
-            else if(x < 6)
-            {
-                craftingSlotArray[1, x - 3] = inventory[x, 4];
-            }
-            else
-            {
-                craftingSlotArray[2, x - 6] = inventory[x, 4];
-            }
-        }
-
-        
+            {inventory[0,4],inventory[1,4],inventory[2,4] },
+            {inventory[3,4],inventory[4,4],inventory[5,4] },
+            {inventory[6,4],inventory[7,4],inventory[8,4] },
+        };
 
         if(craftingSlotArray[1,1] == 2)
         {
@@ -325,6 +316,16 @@ public class Player : MonoBehaviour
             result.transform.localPosition = new Vector3(0, 0, 0);
             result.GetComponent<InventoryItem>().isInResultSlot = true;
             result.GetComponent<InventoryItem>().itemIndex = 1;
+        }
+        else if(craftingSlotArray[1,0] == 3 && craftingSlotArray[1,1] == 1)
+        {
+            craftingResult = 1;
+            Debug.Log("RopeRecipe...");
+            result = Instantiate(itemsInventory[4], position: new Vector3(0, 0, 0), Quaternion.identity);
+            result.transform.SetParent(craftingResultObj.transform);
+            result.transform.localPosition = new Vector3(0, 0, 0);
+            result.GetComponent<InventoryItem>().isInResultSlot = true;
+            result.GetComponent<InventoryItem>().itemIndex = 4;
         }
         else
         {
@@ -367,15 +368,11 @@ public class Player : MonoBehaviour
 
     void OpenInventory()
     {
-        Cursor.lockState = CursorLockMode.Confined;
-        Cursor.visible = true;
         inventoryObj.SetActive(true);
         isInvOpen = true;
     }
     void CloseInventory()
     {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
         inventoryObj.SetActive(false);
         isInvOpen = false;
     }

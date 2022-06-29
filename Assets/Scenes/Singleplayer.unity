@@ -2462,7 +2462,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &463859724
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5367,11 +5367,13 @@ MonoBehaviour:
   - {fileID: 6245297652690859270, guid: 836bbb6337db47748a41ddb78c2b6b07, type: 3}
   - {fileID: 3570525792434618038, guid: 5764e0813d0a7e849852f18be0740074, type: 3}
   - {fileID: 6319597291454299430, guid: 698526cf8ed439140a51ee3f6db9c0b4, type: 3}
+  - {fileID: 6245297652690859270, guid: e4dbb8f436e571d4881e7d765a1b3aa3, type: 3}
   itemsDropped:
   - {fileID: 0}
   - {fileID: 7712351917062110178, guid: 748590dc45098874a98ed6f6876c2933, type: 3}
   - {fileID: 2758500479957210047, guid: 8997aa1d3ee2c1849ac15e9e4691fc15, type: 3}
   - {fileID: 7424717770818511342, guid: 62c6171b07b625b4ba90d30ad2f75cbb, type: 3}
+  - {fileID: 7712351917062110178, guid: 4c41d62021537714aba4bdbe9b7acb61, type: 3}
   hotbar: 000000000000000000000000000000000000000000000000000000000000000000000000
   hotbarObj: {fileID: 632485073}
   itemContainer: {fileID: 1038947483}
@@ -8324,6 +8326,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4618e7a7cc7cdb64d8686878d7bf75a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  craftingResult: 0
 --- !u!1 &1952555032
 GameObject:
   m_ObjectHideFlags: 0
